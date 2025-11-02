@@ -37,7 +37,7 @@ typedef struct
 #pragma pack(push,1)
 typedef struct
 {
-    uint16_t        m_baurate;
+    int             m_baurate;
     mcu_healcheck_t m_healcheck_t;
     packet_recv_t   m_recv_t;
     packet_send_t   m_send_t;

@@ -30,8 +30,8 @@ usb_comm_impl_t* communication_init(uint16_t _baurate)
 
     usb_comm_impl_t *usb_comm  = (usb_comm_impl_t*)malloc(sizeof(usb_comm_impl_t));
 
-    usb_comm->m_baurate = _baurate;
-    Serial.begin(_baurate);
+    usb_comm->m_baurate = (int)_baurate;
+    Serial.begin(usb_comm->m_baurate);
     usb_comm->m_healcheck_t = g_healcheck_packet;
     usb_comm->m_send_t  = g_default_send_packet;
     usb_comm->m_recv_t  = g_default_recv_packet;
