@@ -5,28 +5,24 @@
 #define LED_1_PIN PA6
 #define LED_2_PIN PA7
 
-extern packet_comm_t g_comm;
 
-int myFunction(int, int);
+usb_comm_impl_t *usb_com;
 
 void setup() {
-
-  Serial.begin(115200);
-  //while(!Serial);  
-  Serial.write("STM32F407 USB CDC Ready!");
+  
+  usb_com = communication_init(115200);
 
   pinMode(LED_1_PIN, OUTPUT);
   pinMode(LED_2_PIN, OUTPUT);
 
-  int result = myFunction(2, 3);
 }
 
 void loop() {
 
   digitalToggle(LED_1_PIN);
   digitalToggle(LED_2_PIN);
-  Serial.write((uint8_t*)&g_comm, sizeof(packet_comm_t));
-  delay(5000);
+  usb_com->usb_comm_send((uint8_t *)&(usb_com->m_healcheck_t), sizeof(mcu_healcheck_t));
+  delay(1000);
 }
 
 int myFunction(int x, int y) {
