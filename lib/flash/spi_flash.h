@@ -14,4 +14,5 @@ typedef struct
     void (*flash_spi_erase)(void);
 } flash_spi_impl;
 
-void flash_spi_init(flash_spi_impl *flash, SPIClass *spi, uint32_t cs);
+//void flash_spi_init(flash_spi_impl *flash, SPIClass *spi, uint32_t cs);
+flash_spi_impl* flash_spi_init (SPIClass *spi, uint32_t cs);

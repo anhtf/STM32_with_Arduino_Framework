@@ -73,17 +73,23 @@ static void spi_flash_erase_impl()
     flash_wait_ready();
 }
 
-
-void flash_spi_init(flash_spi_impl *flash, SPIClass *spi, uint32_t cs)
+flash_spi_impl* flash_spi_init (SPIClass *spi, uint32_t cs)
 {
-    g_flash = flash;
-    g_flash->m_spi = spi;
-    g_flash->m_cs = cs;
+    if (spi == NULL || cs == 0) return NULL;
 
+    flash_spi_impl* spi_obj = (flash_spi_impl*)(malloc(sizeof(flash_spi_impl)));
+    if (spi_obj == NULL) return NULL;
+    
     pinMode(cs, OUTPUT);
     digitalWrite(cs, HIGH);
+    spi->begin();
 
-    g_flash->flash_spi_write  = spi_flash_write_impl;
-    g_flash->flash_spi_read   = spi_flash_read_impl;
-    g_flash->flash_spi_erase  = spi_flash_erase_impl;
+    spi_obj->m_spi = spi;
+    spi_obj->m_cs = cs;
+
+    spi_obj->flash_spi_write = spi_flash_write_impl;
+    spi_obj->flash_spi_read = spi_flash_read_impl;
+    spi_obj->flash_spi_erase = spi_flash_erase_impl;
+    g_flash = spi_obj;
+    return spi_obj;
 }
