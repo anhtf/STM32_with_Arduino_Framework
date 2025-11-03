@@ -75,21 +75,40 @@ static void spi_flash_erase_impl()
 
 flash_spi_impl* flash_spi_init (SPIClass *spi, uint32_t cs)
 {
-    if (spi == NULL || cs == 0) return NULL;
+    Serial.write("[FLASH] SPI Flash module init started.\r\n", 40);
 
+    if (spi == NULL || cs == 0) {
+        Serial.write("[FLASH] Error: Invalid SPI instance or CS pin.\r\n", 50);
+        return NULL;
+    }
+
+    Serial.write("[FLASH] Allocating memory for flash instance...\r\n", 50);
     flash_spi_impl* spi_obj = (flash_spi_impl*)(malloc(sizeof(flash_spi_impl)));
-    if (spi_obj == NULL) return NULL;
-    
+    if (spi_obj == NULL) {
+        Serial.write("[FLASH] Error: Memory allocation failed.\r\n", 42);
+        return NULL;
+    }
+    Serial.write("[FLASH] Memory allocated successfully.\r\n", 38);
+
+    Serial.write("[FLASH] Configuring Chip Select (CS) pin...\r\n", 45);
     pinMode(cs, OUTPUT);
     digitalWrite(cs, HIGH);
+    
+    Serial.write("[FLASH] Initializing SPI peripheral...\r\n", 39);
     spi->begin();
 
     spi_obj->m_spi = spi;
     spi_obj->m_cs = cs;
-
+    Serial.write("[FLASH] Assigned SPI instance and CS pin.\r\n", 42);
+    
+    Serial.write("[FLASH] Assigning write/read/erase function pointers...\r\n", 58);
     spi_obj->flash_spi_write = spi_flash_write_impl;
     spi_obj->flash_spi_read = spi_flash_read_impl;
     spi_obj->flash_spi_erase = spi_flash_erase_impl;
+
+    Serial.write("[FLASH] Setting global flash instance pointer.\r\n", 47);
     g_flash = spi_obj;
+
+    Serial.write("[FLASH] SPI Flash module init finished successfully.\r\n", 56);
     return spi_obj;
 }
