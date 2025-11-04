@@ -23,7 +23,8 @@ static mcu_healcheck_t g_healcheck_packet =
     .m_miss_count = 0
 };
 
-usb_comm_impl_t* communication_init(uint16_t _baurate)
+// Changed parameter from uint16_t to uint32_t
+usb_comm_impl_t* communication_init(uint32_t _baurate)
 {
     if (_baurate > 0) {
         Serial.begin(_baurate);

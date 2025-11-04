@@ -48,6 +48,6 @@ typedef struct
 #pragma pack(pop)
 
 
-usb_comm_impl_t* communication_init(uint16_t _baurate);
-
+// Changed parameter from uint16_t to uint32_t to support higher baud rates
+usb_comm_impl_t* communication_init(uint32_t _baurate);
 void send_data(uint8_t *_data, uint16_t length);
